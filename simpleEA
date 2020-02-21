@@ -1,0 +1,55 @@
+from random import randint
+import matplotlib.pyplot as plt
+import numpy as np
+def fit(x):
+    return [2 if ele ==0 else 1 / ele for ele in x]
+
+
+def init_population(maxn, n):
+    return [randint(0, maxn) for i in range(n)]
+
+
+def wheel(T, x):
+    x.sort(key=lambda i: fit(i))
+    return x[:T]
+
+
+def mutation(x, N=4):
+    for i, v in enumerate(x):
+        pos = randint(0, N)
+        x[i] = v ^ (1 << pos)
+    return x
+
+
+def crossover(x, N=4):
+    ans = []
+    for i in range(0, len(x) - 1, 2):
+        x1, x2 = x[i], x[i + 1]
+        pos = randint(0,N)
+        flag1 = (1 << pos) - 1
+        flag2 = (1 << N) - 1 - flag1
+        # flag1 is something like 00111 and flag2 is like 11000
+        o1 = x1 & flag1 + x2 & flag2
+        o2 = x1 & flag2 + x2 & flag1
+        ans.append(o1)
+        ans.append(o2)
+    return ans
+
+
+def nextGeneration(x, miu):
+    cross_population = crossover(x[:miu // 2])
+    mutated_population = mutation(x[miu // 2:])
+    return cross_population + mutated_population
+
+def test(miu):
+    x = init_population(31, miu)
+    val = []
+    while max(fit(x)) < 2:
+        print("round: ",len(val),", instances: ",x)
+        val.append(max(fit(x)))
+        x = nextGeneration(x, len(x))
+    val.append(max(fit(x)))
+    print("result: ",x)
+    plt.plot(range(len(val)),val)
+    plt.show()
+test(4)
