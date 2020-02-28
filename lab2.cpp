@@ -99,14 +99,14 @@ int main() {
 	int experiment_time = 1000;
 	int tot_g = 0;
 	for(int i=0;i<experiment_time ;++i){
-    	vector<int> p = init_p(5);
-    	int g = 0;
-    	while (!best(p)) {
-        	g++;
-        	p = next_generation(p,0.5);
-    	}
-    	tot_g += g;
-    }
+    		vector<int> p = init_p(5);
+    		int g = 0;
+    		while (!best(p)) {
+        		g++;
+        		p = next_generation(p,0.5);
+    		}
+    		tot_g += g;
+   	 }
     printf("avg g = %f",tot_g*1.0/experiment_time);
     return 0;
 }
